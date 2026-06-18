@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>株式含み益計算</title>
+
+
+<style>
+
+body{
+    font-family:sans-serif;
+    background:#f5f5f5;
+    padding:20px;
+}
+
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+
+.card{
+    background:white;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
+
+input{
+    width:100%;
+    padding:8px;
+    margin:5px 0 10px;
+}
+
+
+button{
+    padding:10px 15px;
+    margin:5px;
+    border:none;
+    border-radius:5px;
+}
+
+
+.addBtn{
+    background:#007bff;
+    color:white;
+}
+
+
+.calcBtn{
+    background:#28a745;
+    color:white;
+    float:right;
+}
+
+
+.deleteBtn{
+    background:#dc3545;
+    color:white;
+    float:right;
+}
+
+
+.profit{
+    color:green;
+    font-size:20px;
+    font-weight:bold;
+}
+
+
+.loss{
+    color:red;
+    font-size:20px;
+    font-weight:bold;
+}
+
+
+.purchaseRow{
+    border-top:1px solid #ddd;
+    margin-top:10px;
+    padding-top:10px;
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="card">
+
+
+<h2>株式含み益計算</h2>
+
+
+<div>
+
+銘柄：
+
+<input id="symbol" value="4413">
+
+<br>
+
+
+現在株価：
+
+<b id="price">
+取得中...
+</b>
+
+
+</div>
+
+
+
+<div id="purchaseRows">
+
+
+<div class="purchaseRow">
+
+
+<button class="deleteBtn"
+onclick="removeRow(this)">
+×
+</button>
+
+
+購入単価
+
+<input class="buyPrice"
+type="number">
+
+
+購入株数
+
+<input class="shares"
+type="number">
+
+
+</div>
+
+
+</div>
+
+
+
+<button class="addBtn"
+onclick="addRow()">
+
+＋購入履歴追加
+
+</button>
+
+
+<button class="calcBtn"
+onclick="calculate()">
+
+含み益を計算
+
+</button>
+
+
+
+</div>
+
+
+
+<div id="result"></div>
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+let currentPrice=0;
+
+
+
+// Yahoo Finance取得
+
+async function getPrice(){
+
+
+let code =
+document.getElementById("symbol").value;
+
+
+
+let url =
+"https://query1.finance.yahoo.com/v8/finance/chart/"
++code+".T";
+
+
+
+try{
+
+
+let res =
+await fetch(url);
+
+
+
+let data =
+await res.json();
+
+
+
+currentPrice =
+data.chart.result[0]
+.meta.regularMarketPrice;
+
+
+
+document.getElementById("price")
+.innerHTML =
+currentPrice.toLocaleString()+"円";
+
+
+
+}catch(e){
+
+
+document.getElementById("price")
+.innerHTML="取得失敗";
+
+
+}
+
+
+}
+
+
+
+getPrice();
+
+
+
+
+// 行追加
+
+function addRow(){
+
+
+let div =
+document.createElement("div");
+
+
+div.className="purchaseRow";
+
+
+div.innerHTML=
+
+
+'<button class="deleteBtn" onclick="removeRow(this)">×</button>'+
+
+'購入単価'+
+'<input class="buyPrice" type="number">'+
+
+'購入株数'+
+'<input class="shares" type="number">';
+
+
+
+document.getElementById("purchaseRows")
+.appendChild(div);
+
+
+}
+
+
+
+//削除
+
+function removeRow(btn){
+
+
+let rows =
+document.getElementsByClassName(
+"purchaseRow"
+);
+
+
+
+if(rows.length<=1){
+
+alert("最低1件必要です");
+
+return;
+
+}
+
+
+btn.parentNode.remove();
+
+
+}
+
+
+
+
+
+function calculate(){
+
+
+let prices =
+document.getElementsByClassName(
+"buyPrice"
+);
+
+
+let shares =
+document.getElementsByClassName(
+"shares"
+);
+
+
+
+let totalCost=0;
+
+let totalShares=0;
+
+
+
+for(let i=0;i<prices.length;i++){
+
+
+let p =
+Number(prices[i].value);
+
+
+let s =
+Number(shares[i].value);
+
+
+
+if(p>0 && s>0){
+
+
+totalCost += p*s;
+
+totalShares += s;
+
+
+}
+
+}
+
+
+
+if(totalShares==0){
+
+alert("購入履歴を入力してください");
+
+return;
+
+}
+
+
+
+let average =
+totalCost/totalShares;
+
+
+
+let profit =
+(currentPrice-average)
+*totalShares;
+
+
+
+document.getElementById("result")
+.innerHTML=
+
+
+'<div class="card">'+
+
+"平均取得単価："+
+Math.round(average).toLocaleString()+
+"円<br>"+
+
+
+"保有株数："+
+totalShares.toLocaleString()+
+"株<br>"+
+
+
+"現在株価："+
+currentPrice.toLocaleString()+
+"円<br><br>"+
+
+
+'<div class="'+
+(profit>=0?"profit":"loss")
++'">'+
+
+"含み益："+
+Math.round(profit)
+.toLocaleString()+
+"円"+
+
+"</div>"+
+
+
+"</div>";
+
+}
+
+
+
+</script>
+
+
+</body>
+
+</html>
