@@ -49,7 +49,7 @@ button{
 }
 
 .calcBtn{
-    background:#28a745;
+    background:#28a3f5;
     color:white;
     float:right;
 }
@@ -63,13 +63,13 @@ button{
 .profit{
     color:green;
     font-weight:bold;
-    font-size:20px;
+    font-size:22px;
 }
 
 .loss{
     color:red;
     font-weight:bold;
-    font-size:20px;
+    font-size:22px;
 }
 
 .purchaseRow{
@@ -77,6 +77,7 @@ button{
     margin-top:10px;
     padding-top:10px;
 }
+
 
 </style>
 
@@ -170,6 +171,23 @@ onclick="calculate()">
 <script>
 
 
+// Enterキーで計算
+
+document.addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter"){
+
+calculate();
+
+}
+
+});
+
+
+
+
 
 function addRow(){
 
@@ -202,11 +220,14 @@ document.getElementById("purchaseRows")
 
 
 
+
 function removeRow(btn){
 
 
 let rows =
-document.getElementsByClassName("purchaseRow");
+document.getElementsByClassName(
+"purchaseRow"
+);
 
 
 if(rows.length<=1){
@@ -349,6 +370,16 @@ Math.round(profit)
 
 
 "</div>";
+
+
+
+// 結果へスクロール
+
+document.getElementById("result")
+.scrollIntoView({
+behavior:"smooth"
+});
+
 
 }
 
