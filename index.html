@@ -16,21 +16,18 @@ body{
     padding:20px;
 }
 
-
 .container{
     max-width:900px;
     margin:auto;
 }
-
 
 .card{
     background:white;
     padding:15px;
     margin-bottom:15px;
     border-radius:10px;
-    box-shadow:0 2px5px rgba(0,0,0,.1);
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
-
 
 input{
     width:100%;
@@ -39,7 +36,6 @@ input{
     box-sizing:border-box;
 }
 
-
 button{
     padding:10px 15px;
     margin:5px;
@@ -47,12 +43,10 @@ button{
     border-radius:5px;
 }
 
-
 .addBtn{
     background:#007bff;
     color:white;
 }
-
 
 .calcBtn{
     background:#28a745;
@@ -60,13 +54,11 @@ button{
     float:right;
 }
 
-
 .deleteBtn{
     background:#dc3545;
     color:white;
     float:right;
 }
-
 
 .profit{
     color:green;
@@ -74,20 +66,17 @@ button{
     font-size:20px;
 }
 
-
 .loss{
     color:red;
     font-weight:bold;
     font-size:20px;
 }
 
-
 .purchaseRow{
     border-top:1px solid #ddd;
     margin-top:10px;
     padding-top:10px;
 }
-
 
 </style>
 
@@ -104,14 +93,6 @@ button{
 
 
 <h2>株式含み益計算</h2>
-
-
-<label>
-銘柄名
-</label>
-
-<input id="symbol" value="ボードルア(4413)">
-
 
 
 <label>
@@ -140,6 +121,7 @@ onclick="removeRow(this)">
 
 <input class="buyPrice"
 type="number">
+
 
 
 <label>
@@ -224,9 +206,7 @@ function removeRow(btn){
 
 
 let rows =
-document.getElementsByClassName(
-"purchaseRow"
-);
+document.getElementsByClassName("purchaseRow");
 
 
 if(rows.length<=1){
@@ -242,6 +222,7 @@ btn.parentNode.remove();
 
 
 }
+
 
 
 
@@ -267,15 +248,11 @@ return;
 
 
 let prices =
-document.getElementsByClassName(
-"buyPrice"
-);
+document.getElementsByClassName("buyPrice");
 
 
 let shares =
-document.getElementsByClassName(
-"shares"
-);
+document.getElementsByClassName("shares");
 
 
 
@@ -332,30 +309,28 @@ let profit =
 
 
 
-let symbol =
-document.getElementById("symbol")
-.value;
-
-
-
 document.getElementById("result")
 .innerHTML =
 
 
 '<div class="card">'+
 
-"<h3>"+symbol+"</h3>"+
 
 "平均取得単価："+
-Math.round(average).toLocaleString()+
+Math.round(average)
+.toLocaleString()+
 "円<br>"+
 
+
 "保有株数："+
-totalShares.toLocaleString()+
+totalShares
+.toLocaleString()+
 "株<br>"+
 
+
 "現在株価："+
-currentPrice.toLocaleString()+
+currentPrice
+.toLocaleString()+
 "円<br><br>"+
 
 
@@ -363,12 +338,15 @@ currentPrice.toLocaleString()+
 (profit>=0?"profit":"loss")+
 '">'+
 
+
 "含み益："+
 Math.round(profit)
 .toLocaleString()+
 "円"+
 
+
 "</div>"+
+
 
 "</div>";
 
